@@ -3,6 +3,7 @@
   <head>
     <title>CRUD Web Application</title>
     <style>
+      /* Simple styling for the application */
       body {
         font-family: Arial, sans-serif;
         margin: 20px;
@@ -52,13 +53,24 @@
       // Array to store the items
       let items = [];
 
-      // Function to add an item to the list
+      // Variable to store the index of the item being edited
+      let editIndex = -1;
+
+      // Function to add or update an item in the list
       function addItem() {
         let itemNameInput = document.getElementById("itemName");
         let itemName = itemNameInput.value;
 
         if (itemName) {
-          items.push(itemName);
+          if (editIndex > -1) {
+            // If an item is being edited, update the existing item
+            items[editIndex] = itemName;
+            editIndex = -1;
+          } else {
+            // If no item is being edited, add a new item
+            items.push(itemName);
+          }
+
           itemNameInput.value = "";
           refreshItemList();
         }
@@ -68,6 +80,13 @@
       function deleteItem(index) {
         items.splice(index, 1);
         refreshItemList();
+      }
+
+      // Function to edit an item in the list
+      function editItem(index) {
+        let itemNameInput = document.getElementById("itemName");
+        itemNameInput.value = items[index];
+        editIndex = index;
       }
 
       // Function to refresh the item list
@@ -87,7 +106,11 @@
 
           nameCell.innerHTML = item;
           actionCell.innerHTML =
-            '<button onclick="deleteItem(' + index + ')">Delete</button>';
+            '<button onclick="editItem(' +
+            index +
+            ')">Edit</button> <button onclick="deleteItem(' +
+            index +
+            ')">Delete</button>';
         });
       }
     </script>
